@@ -4,6 +4,7 @@
 #include <SDL3/SDL_video.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 const int width = 1280;
 const int height = 720;
@@ -14,7 +15,19 @@ SDL_Renderer *renderer = NULL;
 SDL_Texture *texture = NULL;
 SDL_Event event;
 
+typedef union _pixel{
+    uint32_t hex;
+    struct{
+        uint8_t a;
+        uint8_t b;
+        uint8_t g;
+        uint8_t r;
+    }rgba;
+}Pixel;
+
 int main(int argc, char *argv[]){
+    Pixel *bufferColor = calloc(width * height, sizeof(Pixel));
+
     /*
     SDL_CreateWindowAndRenderer(
         title, 
@@ -43,12 +56,26 @@ int main(int argc, char *argv[]){
 
     char format[3];
     int w, h, maxColor;
+    Pixel pixelTest;
     
     fscanf(image, "%s", format);
     fscanf(image, "%d %d", &w, &h);
     fscanf(image, "%d", &maxColor);
 
     printf("File name: %s\nFormat: %s\nW|H: %d %d\nMax color: %d\n", image_path, format, w, h, maxColor);
+
+    for(int i = 0; i < w * h; i++){
+        int r,g,b;
+
+        if(fscanf(image, "%d %d %d", &r, &g, &b) == 3){
+            bufferColor[i].rgba.r = (uint8_t)r;
+            bufferColor[i].rgba.g = (uint8_t)g;
+            bufferColor[i].rgba.b = (uint8_t)b;
+            bufferColor[i].rgba.a = 255;
+        }
+
+        printf("Pixel[%d] %d %d %d\n", i, bufferColor[i].rgba.r, bufferColor[i].rgba.g, bufferColor[i].rgba.b);
+    }
     /*
     while(1){
         SDL_PollEvent(&event);
