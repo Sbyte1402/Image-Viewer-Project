@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
         w * sizeof(Pixel)
     );
 
-    printf("File name: %s\nW|H: %d x %dpx\nMax. color: %d\n", argv[1], w, h, maxColor);
+    printf("File name: %s\nFormat: %s\nW|H: %d x %dpx\nMax. color: %d\n", argv[1], format, w, h, maxColor);
 
     bool quit = false;
     SDL_Event event;
