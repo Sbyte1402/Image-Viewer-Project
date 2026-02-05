@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Window propierties
 const int width = 1280;
 const int height = 720;
 const char *title = "Image viewer";
@@ -33,12 +34,16 @@ int main(int argc, char *argv[]) {
     SDL_Window *window = NULL;
     if (SDL_CreateWindowAndRenderer(title, width, height, 0, &window, &renderer) < 0) return 1;
 
+    // Load and save data file
     FILE *image = fopen(argv[1], "r");
     if (!image) {
         printf("Image couldn't load.\n");
         return 1;
+    }else{
+        printf("Loading image <%s>...\n\n", argv[1]);
     }
-
+    
+    // Create and store each pixel on bufferColor ("surface")
     fscanf(image, "%s %d %d %d", format, &w, &h, &maxColor);
     Pixel *bufferColor = calloc(w * h, sizeof(Pixel));
 
@@ -67,6 +72,8 @@ int main(int argc, char *argv[]) {
         bufferColor, 
         w * sizeof(Pixel)
     );
+
+    printf("File name: %s\nW|H: %d x %dpx\nMax. color: %d\n", argv[1], w, h, maxColor);
 
     bool quit = false;
     SDL_Event event;
